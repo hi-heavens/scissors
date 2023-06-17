@@ -1,5 +1,6 @@
+import validator from "validator";
 import { User } from "../../models/user.model.js";
-import { getToken } from "../../utils/token.utils.js";
+import { getToken, decodeToken } from "../../utils/token.utils.js";
 
 async function signUp(req, res, next) {
     const { first_name, last_name, user_name, email, password } = req.body;
@@ -25,13 +26,51 @@ async function signUp(req, res, next) {
         status: "successfully registered",
         token,
         data: {
-            user_id: newUser.id,
-            first_name: newUser.first_name,
-            last_name: newUser.last_name,
+            userId: newUser.id,
+            firstName: newUser.first_name,
+            lastName: newUser.last_name,
             email: newUser.email,
-            user_name: newUser.user_name,
+            userName: newUser.user_name,
         }
     });
  }
 
-export { signUp };
+async function login(req, res, next) {
+    const { loginInput, password } = req.body;
+    
+    if (!loginInput || !password) {
+        return res.status(400).json({
+            status: "failed",
+            message: "Please provide a valid username/email and/or password."
+        })
+    }
+    
+    let user;
+    if (validator.isEmail(loginInput)) {
+        user = await User.findOne({email: loginInput}).select("+password");
+    } else {
+        user = await User.findOne({user_name: loginInput}).select("+password");
+    }
+
+    if (!user || !(await user.validPassword(password, user.password))) {
+        return res.status(401).json({
+            status: "failed",
+            message: "Incorrect username/email and/or password"
+        })
+    }
+
+    let token = getToken(user._id);
+    res.status(200).json({
+        status: "login success",
+        token,
+        data: {
+            userId: user.id,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            userName: user.user_name,
+        }
+    })
+};
+
+export { signUp, login };
