@@ -1,5 +1,5 @@
 import { User } from "../../models/user.model.js";
-import { getToken } from "../../controllers/token.controller.js";
+import { getToken } from "../../utils/token.utils.js";
 
 async function signUp(req, res, next) {
     const { first_name, last_name, user_name, email, password } = req.body;
