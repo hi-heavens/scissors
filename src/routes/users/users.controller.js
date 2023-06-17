@@ -3,18 +3,16 @@ import { User } from "../../models/user.model.js";
 import { getToken, decodeToken } from "../../utils/token.utils.js";
 
 async function signUp(req, res, next) {
-    const { first_name, last_name, user_name, email, password } = req.body;
+    const { user_name, email, password } = req.body;
 
-    if (!first_name || !last_name || !email || !password) {
+    if (!user_name || !email || !password) {
         return res.status(401).json({
             status: "failed",
             message: "Kindly reconfirm registration details and try again"
         })
     }
     const user = new User({
-        first_name,
-        last_name,
-        user_name: user_name || "unknown",
+        user_name,
         email,
         password
     });
@@ -27,8 +25,7 @@ async function signUp(req, res, next) {
         token,
         data: {
             userId: newUser.id,
-            firstName: newUser.first_name,
-            lastName: newUser.last_name,
+            userName: newUser.user_name,
             email: newUser.email,
             userName: newUser.user_name,
         }
@@ -65,8 +62,7 @@ async function login(req, res, next) {
         token,
         data: {
             userId: user.id,
-            firstName: user.first_name,
-            lastName: user.last_name,
+            userName: user.user_name,
             email: user.email,
             userName: user.user_name,
         }

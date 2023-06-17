@@ -3,6 +3,7 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
+    /**
     first_name: {
         type: String,
         required: [true, 'Please provide your first name'],
@@ -11,6 +12,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide your last name'],
     },
+    */
     user_name: {
         type: String,
         unique: true,
