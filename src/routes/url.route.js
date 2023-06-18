@@ -1,5 +1,5 @@
 import express from "express";
-import { postURL, validateURL } from "../controllers/url.controller.js";
+import { postURL, validateURL } from "./shortener/shortener.controller.js";
 
 const urlRouter = express.Router();
 

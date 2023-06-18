@@ -1,14 +1,22 @@
 import mongoose from "mongoose";
 
 const urlSchema = new mongoose.Schema({
-  id: {
+  linkId: {
     required: true,
-    type: String
+    type: String,
+    unique: true
   },
   url: {
     required: [true, 'Please provide a valid URL'],
     type: String,
   },
+  name: {
+    type: String,
+    required: [true, 'Please provide a valid name'],
+  },
+  newLink: {
+    type: String,
+  }
 });
 
 const URL = mongoose.model("URL", urlSchema);

@@ -1,4 +1,4 @@
-import { URL } from "../models/url.model.js";
+import { URL } from "../models/shortener.model.js";
 
 async function getURL(req, res) {
     const id = req.params.id;

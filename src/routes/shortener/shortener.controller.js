@@ -1,30 +1,40 @@
 import validator from "validator";
 import urlExist from "url-exist";
 import { nanoid } from "nanoid";
-import { URL } from "../models/url.model.js";
+import { URL } from "../../models/shortener.model.js";
 
-async function postURL(req, res) {
-    const { url, custom } = req.body;
+async function createURL(req, res) {
+    const url = req.body.url;
+    const customName = req.body.custom || false;
 
-    if (custom && (custom.length > 7 || custom.length <= 1)) {
+    const regex = /^https?:\/\/([^/?#]+)(?:[/?#]|$)/i;
+    const match = url.match(regex);
+    const linkName = match && match[1];
+
+    let name = req.body.name || linkName;
+
+    if (!customName && (customName.length <= 3 || customName.length > 7)) {
         return res.status(400).json({
             status: "failed",
-            message: "invalid custom name length"
+            message: "Custom name length must be between 4 and 7 characters"
         })
     }
 
-    const exist = await URL.findOne({ id: custom });
+    const exist = await URL.findOne({ linkId: customName });
     if (exist) {
         return res.status(409).json({
             status: "failed",
             message: "custom name already exists"
         })
     }
-    const id = custom || nanoid(7);
+    const linkId = customName || nanoid(7);
+    const newLink = `${req.hostname}:${process.env.PORT}${req.originalUrl}/${linkId}`;
 
     let savedURL = new URL({
-        id,
-        url
+        linkId,
+        url,
+        name,
+        newLink,
     })
     try {
         savedURL = await savedURL.save();
@@ -35,7 +45,7 @@ async function postURL(req, res) {
     }
     res.json({
         status: "success",
-        message: `http://127.0.0.1:${process.env.PORT}/${savedURL.id}`
+        newLink
     });
 }
 
@@ -68,4 +78,4 @@ async function validateURL(req, res, next) {
     }
 */
 
-export { postURL, validateURL };
+export { createURL, validateURL };
