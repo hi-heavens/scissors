@@ -2,6 +2,22 @@ import validator from "validator";
 import urlExist from "url-exist";
 import { nanoid } from "nanoid";
 import { URL } from "../../models/shortener.model.js";
+import { decodeToken } from "../../utils/token.utils.js";
+import { User } from "../../models/user.model.js";
+import { AppError } from "../../utils/app.error.js";
+import  catchAsync  from "../../utils/catchAsync.error.js";
+
+export const validateUser = catchAsync(async function (req, res, next) {
+    const requestHandler = req.headers.authorization;
+
+    const decode = await decodeToken(requestHandler);
+    const loginUser = await User.findById(decode.id);
+    if (!loginUser) {
+        return next(new AppError("The user could not be found", 401));
+    }
+    req.user = loginUser;
+    next();
+});
 
 async function createURL(req, res) {
     const url = req.body.url;
@@ -40,7 +56,8 @@ async function createURL(req, res) {
         savedURL = await savedURL.save();
     } catch (err) {
         return res.send({
-            status: "An error was encountered! Please try again."
+            status: "failed",
+            message: "An error was encountered! Please try again."
         });
     }
     res.json({
