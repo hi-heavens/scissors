@@ -44,6 +44,7 @@ async function createURL(req, res) {
         })
     }
     const linkId = customName || nanoid(7);
+    const userId = req.user._id;
     const newLink = `${req.hostname}:${process.env.PORT}${req.originalUrl}/${linkId}`;
 
     let savedURL = new URL({
@@ -51,22 +52,24 @@ async function createURL(req, res) {
         url,
         name,
         newLink,
+        userId,
     })
     try {
         savedURL = await savedURL.save();
     } catch (err) {
-        return res.send({
+        return res.json({
             status: "failed",
             message: "An error was encountered! Please try again."
         });
     }
-    res.json({
+    return res.json({
         status: "success",
         newLink
     });
 }
 
-async function validateURL(req, res, next) {
+export const validateURL = catchAsync(async function (req, res, next) {
+// async function validateURL(req, res, next) {
     const { url } = req.body;
     if (!url) {
         return res.status(400).json({
@@ -84,7 +87,7 @@ async function validateURL(req, res, next) {
             message: "Bad request",
         })
     }
-}
+});
 /**
     const isExist = await urlExist(url);
     if (!isExist) {
@@ -95,4 +98,12 @@ async function validateURL(req, res, next) {
     }
 */
 
-export { createURL, validateURL };
+export const getLinks = catchAsync(async function (req, res, next) {
+    const loginUser = await URL.find({userId: req.user._id}).select("namd url newLink");
+    return res.json({
+        status: "found",
+        message: loginUser
+    });
+});
+
+export { createURL };

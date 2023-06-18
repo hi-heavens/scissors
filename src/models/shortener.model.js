@@ -16,6 +16,10 @@ const urlSchema = new mongoose.Schema({
   },
   newLink: {
     type: String,
+  },
+  userId: {
+    type: String,
+    required: [true, 'Please provide a valid user ID'],
   }
 });
 
