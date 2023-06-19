@@ -3,6 +3,7 @@ import compression from "compression";
 import { shortenerRouter } from "./routes/shortener/shortener.router.js";
 import { getUrlRouter } from "./routes/getUrl.route.js";
 import { userRouter } from "./routes/users/users.router.js";
+import { qrcodeRouter } from "./routes/qrcodes/qrcode.router.js";
 import globalErrorHandler from "./utils/globalErrorHandler.js";
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', getUrlRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/shortener', shortenerRouter);
+app.use('/api/v1/qrcode', qrcodeRouter);
 
 app.all("*", (req, res) => {
     res.send(`The ${req.method} route ${req.originalUrl} does not exist! 💨`);
