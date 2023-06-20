@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.3",
     "nanoid": "^4.0.2",
+    "qrcode": "^1.5.3",
     "url-exist": "^3.0.1",
     "validator": "^13.9.0"
   },

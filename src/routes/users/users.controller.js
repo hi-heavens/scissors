@@ -1,6 +1,19 @@
 import validator from "validator";
 import { User } from "../../models/user.model.js";
 import { getToken, decodeToken } from "../../utils/token.utils.js";
+import  catchAsync  from "../../utils/catchAsync.error.js";
+
+export const validateUser = catchAsync(async function (req, res, next) {
+    const requestHandler = req.headers.authorization;
+
+    const decode = await decodeToken(requestHandler);
+    const loginUser = await User.findById(decode.id);
+    if (!loginUser) {
+        return next(new AppError("The user could not be found", 401));
+    }
+    req.user = loginUser;
+    next();
+});
 
 async function signUp(req, res, next) {
     const { user_name, email, password } = req.body;
