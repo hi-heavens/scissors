@@ -1,5 +1,6 @@
 import express from "express";
 import compression from "compression";
+import cors from "cors";
 import { shortenerRouter } from "./routes/shortener/shortener.router.js";
 import { getUrlRouter } from "./routes/getUrl.route.js";
 import { userRouter } from "./routes/users/users.router.js";
@@ -8,6 +9,7 @@ import globalErrorHandler from "./utils/globalErrorHandler.js";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(compression());
 app.use(express.urlencoded({ extended: true }));
