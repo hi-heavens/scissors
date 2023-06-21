@@ -45,7 +45,7 @@ async function createURL(req, res) {
     }
     const linkId = customName || nanoid(7);
     const userId = req.user._id;
-    const newLink = `${req.hostname}:${process.env.PORT}${req.originalUrl}/${linkId}`;
+    const newLink = `${req.protocol}://${req.hostname}:${process.env.PORT}/${linkId}`;
 
     let savedURL = new URL({
         linkId,
@@ -72,20 +72,14 @@ export const validateURL = catchAsync(async function (req, res, next) {
 // async function validateURL(req, res, next) {
     const { url } = req.body;
     if (!url) {
-        return res.status(400).json({
-            status: "failed",
-            message: "Missing required parameter(s)"
-        })
+        return next(new AppError("Missing required parameter(s)", 400));
     };
 
     const isValid = validator.isURL(url);
     if (isValid) {
         next();
     } else {
-        res.status(400).json({
-            status: "failed",
-            message: "Bad request",
-        })
+        return next(new AppError("Invalid URL/Bad request", 400));
     }
 });
 /**
