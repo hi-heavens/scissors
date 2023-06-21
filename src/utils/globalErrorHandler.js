@@ -55,10 +55,7 @@ export default (err, req, res, next) => {
 
     if (error.name === "CastError") error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(err);
-
-    if (error.name === "ValidationError")
-      error = handleValidationErrorDB(error);
-
-    sendErrorProd(err, res);
+    if (err.name === "ValidationError") error = handleValidationErrorDB(err);
+    sendErrorProd(error, res);
   }
 };

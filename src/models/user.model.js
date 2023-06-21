@@ -3,21 +3,11 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
-    /**
-    first_name: {
-        type: String,
-        required: [true, 'Please provide your first name'],
-    },
-    last_name: {
-        type: String,
-        required: [true, 'Please provide your last name'],
-    },
-    */
     user_name: {
         type: String,
         unique: true,
         minLength: [5, 'Username must be at least 5 characters long'],
-        validate: [validator.isAlphanumeric, 'Please provide an alphanumeric character'],
+        validate: [validator.isAlphanumeric, 'Please provide alphanumeric characters'],
     },
     email: {
         type: String,

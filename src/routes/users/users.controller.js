@@ -20,11 +20,13 @@ export const signUp = catchAsync(async function (req, res, next) {
   const { user_name, email, password } = req.body;
 
   if (!user_name || !email || !password) {
-    return next(new AppError("Kindly reconfirm registration details and try again.", 401));
+    return next(
+      new AppError("Kindly reconfirm registration details and try again.", 401)
+    );
   }
   const user = new User({
-    user_name,
-    email,
+    user_name: user_name.toLowerCase(),
+    email: email.toLowerCase(),
     password,
   });
   const newUser = await user.save();
@@ -44,10 +46,16 @@ export const signUp = catchAsync(async function (req, res, next) {
 });
 
 export const login = catchAsync(async function (req, res, next) {
-  const { loginInput, password } = req.body;
+  let { loginInput, password } = req.body;
+  loginInput = loginInput.toLowerCase();
 
   if (!loginInput || !password) {
-    return next(new AppError("Please provide a valid username/email and/or password.", 400));
+    return next(
+      new AppError(
+        "Please provide a valid username/email and/or password.",
+        400
+      )
+    );
   }
 
   let user;
