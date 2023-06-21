@@ -45,6 +45,12 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handleExpiredToken = (err) => {
+  const message = `Your token has expired. Please log in again!`;
+  console.log(message);
+  return new AppError(message, 401);
+};
+
 export default (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error! 🔥";
@@ -56,6 +62,7 @@ export default (err, req, res, next) => {
     if (error.name === "CastError") error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(err);
     if (err.name === "ValidationError") error = handleValidationErrorDB(err);
+    if (err.name === "TokenExpiredError") error = handleExpiredToken(err);
     if(error.message)
       sendErrorProd(error, res);
     else
