@@ -5,6 +5,7 @@ import { shortenerRouter } from "./routes/shortener/shortener.router.js";
 import { getUrlRouter } from "./routes/get.url.route.js";
 import { userRouter } from "./routes/users/users.router.js";
 import { qrcodeRouter } from "./routes/qrcodes/qrcode.router.js";
+import { dasboardRouter } from "./routes/dashboard/dashboard.route.js";
 import rateLimiter from "./utils/rate.limit.js";
 import globalErrorHandler from "./utils/globalErrorHandler.js";
 
@@ -19,7 +20,7 @@ app.use('/', getUrlRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/shortener', rateLimiter, shortenerRouter);
 app.use('/api/v1/qrcode', rateLimiter, qrcodeRouter);
-app.use('/api/v1/dashboard', qrcodeRouter);
+app.use('/api/v1/dashboard', dasboardRouter);
 
 app.all("*", (req, res) => {
     res.send(`The ${req.method} route ${req.originalUrl} does not exist! 💨`);

@@ -1,9 +1,9 @@
 import express from "express";
 import { validateUser } from "../users/users.controller.js";
-import { generateQRCode } from "./qrcode.controller.js";
+import { dashBoard } from "./dashboard.controller.js";
 
-const qrcodeRouter = express.Router();
+const dasboardRouter = express.Router();
 
-qrcodeRouter.post('/', validateUser, generateQRCode);
+dasboardRouter.get('/', validateUser, dashBoard);
 
-export { qrcodeRouter };
+export { dasboardRouter };
