@@ -20,6 +20,10 @@ const urlSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: [true, 'Please provide a valid user ID'],
+  },
+  clicks: {
+    type: Number,
+    default: 0,
   }
 });
 
