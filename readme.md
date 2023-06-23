@@ -6,7 +6,7 @@ Scissor is a powerful URL shortening system designed to provide users with the a
 
 ## Documentation
 
-[Click here for API Documentation](https://documenter.getpostman.com/view/22961306/2s93z3h6mE)
+[Postman API Documentation](https://documenter.getpostman.com/view/22961306/2s93z3h6mE)
 
 ## Features
 
