@@ -4,6 +4,10 @@
 
 Scissor is a powerful URL shortening system designed to provide users with the ability to generate short and customized URLs for easy sharing and tracking. It aims to disrupt the URL shortening industry by offering a user-friendly interface, advanced features, and reliable performance.
 
+## Documentation
+
+[Click here for API Documentation](https://documenter.getpostman.com/view/22961306/2s93z3h6mE)
+
 ## Features
 
 ### URL Shortening
