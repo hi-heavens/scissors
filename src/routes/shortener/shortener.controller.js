@@ -19,7 +19,7 @@ export const validateUser = catchAsync(async function (req, res, next) {
     next();
 });
 
-async function createURL(req, res) {
+export const createURL = catchAsync(async function (req, res, next) {
     const url = req.body.url;
     const customName = req.body.custom || false;
 
@@ -30,18 +30,12 @@ async function createURL(req, res) {
     let name = req.body.name || linkName;
 
     if (!customName && (customName.length <= 3 || customName.length > 7)) {
-        return res.status(400).json({
-            status: "failed",
-            message: "Custom name length must be between 4 and 7 characters"
-        })
+        return next(new AppError("Custom name length must be between 4 and 7 characters", 400));
     }
 
     const exist = await URL.findOne({ linkId: customName });
     if (exist) {
-        return res.status(409).json({
-            status: "failed",
-            message: "custom name already exists"
-        })
+        return next(new AppError("Custom name already exists", 409));
     }
     const linkId = customName || nanoid(7);
     const userId = req.user._id;
@@ -57,16 +51,13 @@ async function createURL(req, res) {
     try {
         savedURL = await savedURL.save();
     } catch (err) {
-        return res.json({
-            status: "failed",
-            message: "An error was encountered! Please try again."
-        });
+        return next(new AppError("An error was encountered! Please try again.", 500));
     }
     return res.json({
         status: "success",
         newLink
     });
-}
+});
 
 export const validateURL = catchAsync(async function (req, res, next) {
 // async function validateURL(req, res, next) {
@@ -99,5 +90,3 @@ export const getLinks = catchAsync(async function (req, res, next) {
         message: loginUser
     });
 });
-
-export { createURL };
