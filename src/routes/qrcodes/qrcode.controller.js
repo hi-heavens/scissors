@@ -31,6 +31,16 @@ export const generateQRCode = catchAsync(async function (req, res, next) {
     "Content-Disposition": 'attachment; filename="qrcode.png"',
     "Content-Type": "image/png",
   });
+  const qrCodeBase64 = qrCodeBlob.toString('base64');
   console.log("QR Code generated successfully");
-  res.send(qrCodeBlob);
+
+  // If the client want both the buffer and base64 string
+  res.set("Content-Type", "application/json");
+  res.json({
+    buffer: qrCodeBlob,
+    base64: qrCodeBase64
+  })
+
+  // This is just for the image to be sent as buffer.
+  // res.send(qrCodeBlob);
 });
