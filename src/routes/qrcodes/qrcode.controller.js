@@ -34,7 +34,7 @@ export const generateQRCode = catchAsync(async function (req, res, next) {
   const qrCodeBase64 = qrCodeBlob.toString('base64');
   console.log("QR Code generated successfully");
 
-  // If the client want both the buffer and base64 string
+  // If the client want both the blob and base64 string
   res.set("Content-Type", "application/json");
   res.json({
     buffer: qrCodeBlob,
