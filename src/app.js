@@ -23,7 +23,8 @@ app.use('/api/v1/qrcode', rateLimiter, qrcodeRouter);
 app.use('/api/v1/dashboard', dasboardRouter);
 
 app.all("*", (req, res) => {
-    res.send(`The ${req.method} route ${req.originalUrl} does not exist! 💨`);
+    res.redirect('https://documenter.getpostman.com/view/22961306/2s93z3h6mE');
+    // res.send(`The ${req.method} route ${req.originalUrl} does not exist! 💨`);
 });
 
 app.use(globalErrorHandler);
